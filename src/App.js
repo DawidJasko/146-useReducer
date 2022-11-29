@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
 import CourseInfo from './CourseInfo';
+import Form from './Form';
 
 import './style.css';
 
@@ -34,7 +35,7 @@ const samurajProgramowaniaCourses = [
 const courseReducer = (state, action) => {
   switch (action.type) {
     case 'ADD':
-      return;
+      return [...state, action.course];
     case 'REMOVE':
       return state.filter((course) => course.id !== action.id);
     case 'FETCH':
@@ -56,13 +57,20 @@ const App = () => {
     dispatch({ type: 'FETCH', data: samurajProgramowaniaCourses });
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    asyncFetch();
+  }, []);
 
   const coursesElement = state.map((course) => (
     <CourseInfo key={course.id} onClickHandler={dispatch} {...course} />
   ));
 
-  return <div>{coursesElement}</div>;
+  return (
+    <div>
+      {coursesElement}
+      <Form addHandler={dispatch} />
+    </div>
+  );
 };
 
 export default App;
